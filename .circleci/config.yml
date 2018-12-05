@@ -19,7 +19,7 @@ jobs:
           command: yarn install
       - run:
           name: Run Package
-          command: yarn dist
+          command: yarn pack
 
 workflows:
   version: 2

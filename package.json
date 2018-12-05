@@ -19,7 +19,7 @@
     "postinstall-old": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
     "start": "concurrently --kill-others \"npm run hot-server\" \"npm run start-hot\"",
     "lint": "tslint -p .",
-    "pack": "electron-builder --dir",
+    "pack": "electron-builder -mwl --dir",
     "dist": "electron-builder"
   },
   "build": {
