@@ -4,97 +4,19 @@
 #
 
 defaults: &defaults
-  macos:
-    xcode: "10.1.0"
-  working_directory: ~/repo
-
-linux: &linux
-  docker:
-    - image: circleci/node:10.11
-  working_directory: ~/repo
-
-wine: &wine
   docker:
     - image: electronuserland/builder:wine
   working_directory: ~/repo
 
 version: 2
 jobs:
-  setup:
-    <<: *wine
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore node modules
-          keys:
-            - v2-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - save_cache:
-          name: Save node modules
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package.json" }}
-
-  build:
-    <<: *wine
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore node modules
-          keys:
-            - v2-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - run:
-          name: Run Build
-          command: yarn build
-      - save_cache:
-          name: Save build
-          paths:
-            - dist
-          key: v2-build-{{ .Branch }}-{{ .Revision }}
-
   package:
-    <<: *wine
+    <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          name: Restore node modules
-          keys:
-            - v2-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
-      - restore_cache:
-          name: Restore build
-          keys:
-            - v2-build-{{ .Branch }}-{{ .Revision }}
       - run:
           name: Install dependencies
           command: yarn install
       - run:
           name: Run Package
-          command: yarn package
-      - run:
-          name: Zip Linux
-          command: zip Reactotron-linux-ia32.zip ./release/linux-ia32/Reactotron-linux-ia32
-
-workflows:
-  version: 2
-  test_and_release:
-    jobs:
-      - setup
-      - build:
-          requires:
-            - setup
-      - package:
-          requires:
-            - build
-
-
+          command: yarn dist

@@ -18,7 +18,12 @@
     "package-all": "npm run package -- --all",
     "postinstall-old": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
     "start": "concurrently --kill-others \"npm run hot-server\" \"npm run start-hot\"",
-    "lint": "tslint -p ."
+    "lint": "tslint -p .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.reactotron.app"
   },
   "repository": "https://github.com/reactotron/reactotron/tree/master/packages/reactotron-app",
   "author": {
@@ -56,6 +61,7 @@
     "css-loader": "^0.28.7",
     "del": "^3.0.0",
     "electron": "3.0.3",
+    "electron-builder": "^20.38.2",
     "electron-packager": "^12.0.1",
     "electron-rebuild": "^1.7.3",
     "express": "^4.16.2",
