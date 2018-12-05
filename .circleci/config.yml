@@ -20,3 +20,9 @@ jobs:
       - run:
           name: Run Package
           command: yarn dist
+
+workflows:
+  version: 2
+  test_and_release:
+    jobs:
+      - package
